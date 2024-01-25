@@ -1,13 +1,12 @@
 import { LinearClient } from "@linear/sdk";
 import { Clipboard, closeMainWindow, getPreferenceValues, open, Toast, showToast } from "@raycast/api";
-import { authorize, oauthClient } from "./api/oauth";
+import { linear } from "./api/linearClient";
 
 const command = async (props: { arguments: Arguments.CreateIssueForMyself }) => {
   const toast = await showToast({ style: Toast.Style.Animated, title: "Creating issue" });
 
   try {
-    const tokens = await oauthClient.getTokens();
-    const accessToken = tokens?.accessToken || (await authorize());
+    const accessToken = await linear.authorize();
     const linearClient = new LinearClient({ accessToken });
 
     const preferences = getPreferenceValues<Preferences.CreateIssueForMyself>();
